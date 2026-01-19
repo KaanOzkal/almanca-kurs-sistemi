@@ -1,0 +1,86 @@
+/* App.css - Modern Admin Teması */
+body {
+  background-color: #f0f2f5; /* Yumuşak gri arka plan */
+  font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+  overflow-x: hidden;
+}
+
+/* Sidebar (Yan Menü) */
+.sidebar {
+  height: 100vh;
+  width: 250px;
+  position: fixed;
+  top: 0;
+  left: 0;
+  background-color: #1e1e2d; /* Koyu Lacivert */
+  color: white;
+  padding-top: 20px;
+  box-shadow: 2px 0 5px rgba(0,0,0,0.1);
+  z-index: 1000;
+}
+
+.sidebar h3 {
+  text-align: center;
+  font-size: 1.2rem;
+  margin-bottom: 30px;
+  color: #fff;
+  font-weight: bold;
+  letter-spacing: 1px;
+}
+
+.sidebar a {
+  padding: 15px 25px;
+  text-decoration: none;
+  font-size: 1rem;
+  color: #a6a6c0;
+  display: flex;
+  align-items: center;
+  transition: 0.3s;
+}
+
+.sidebar a:hover, .sidebar a.active-link {
+  color: #fff;
+  background-color: #2b2b40;
+  border-left: 4px solid #3699ff;
+}
+
+.sidebar a svg {
+  margin-right: 10px;
+  font-size: 1.2rem;
+}
+
+/* İçerik Alanı */
+.main-content {
+  margin-left: 250px; /* Sidebar kadar boşluk */
+  padding: 30px;
+}
+
+/* Kartlar */
+.card {
+  border: none;
+  border-radius: 12px;
+  box-shadow: 0 0 20px 0 rgba(76, 87, 125, 0.02);
+  background-color: white;
+  margin-bottom: 20px;
+}
+
+.card-header {
+  background-color: white;
+  border-bottom: 1px solid #f0f2f5;
+  padding: 20px;
+  font-weight: bold;
+}
+
+/* Tablo */
+.table th {
+  font-size: 0.85rem;
+  text-transform: uppercase;
+  color: #b5b5c3;
+  font-weight: 600;
+  border-top: none;
+}
+.table td {
+  vertical-align: middle;
+  font-size: 0.95rem;
+  color: #464e5f;
+}
