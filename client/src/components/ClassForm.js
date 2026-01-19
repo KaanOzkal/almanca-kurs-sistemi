@@ -15,7 +15,7 @@ const ClassForm = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://127.0.0.1:3000/api/classes', formData);
+      await axios.post('/api/classes', formData);
       toast.success('🎉 Yeni sınıf oluşturuldu!');
       navigate('/'); // Ana sayfaya dön
     } catch (error) {

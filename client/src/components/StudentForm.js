@@ -21,7 +21,7 @@ const StudentForm = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const res = await axios.get('http://127.0.0.1:3000/api/classes');
+        const res = await axios.get('/api/classes');
         setClasses(res.data);
       } catch (error) {
         console.error("Sınıflar yüklenemedi", error);
@@ -38,11 +38,11 @@ const StudentForm = () => {
 
     try {
       // Öğrenciyi kaydet
-      const res = await axios.post('http://127.0.0.1:3000/api/students', formData);
+      const res = await axios.post('/api/students', formData);
       
       // Eğer sınıf seçildiyse, o sınıfa da kaydet
       if(formData.classId) {
-          await axios.post('http://127.0.0.1:3000/api/students/add-to-class', {
+          await axios.post('/api/students/add-to-class', {
               studentId: res.data._id,
               classId: formData.classId
           });

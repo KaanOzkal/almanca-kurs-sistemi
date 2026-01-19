@@ -34,8 +34,8 @@ const StudentDetail = () => {
   const fetchData = async () => {
     try {
       // Windows 127.0.0.1 Ayarı
-      const response = await axios.get(`http://127.0.0.1:3000/api/students/${id}`);
-      const classRes = await axios.get('http://127.0.0.1:3000/api/classes');
+      const response = await axios.get(`/api/students/${id}`);
+      const classRes = await axios.get('/api/classes');
       
       setData(response.data);
       setClasses(classRes.data);
@@ -67,7 +67,7 @@ const StudentDetail = () => {
   const handleAddNote = async () => {
     if(!newNote.trim()) return toast.warn("Boş not eklenemez!");
     try {
-        await axios.post(`http://127.0.0.1:3000/api/students/${id}/note`, { text: newNote });
+        await axios.post(`/api/students/${id}/note`, { text: newNote });
         toast.success("📌 Not eklendi!");
         setNewNote("");
         fetchData();
@@ -77,7 +77,7 @@ const StudentDetail = () => {
   const handleDeleteNote = async (noteId) => {
     if(!window.confirm("Bu notu silmek istediğine emin misin?")) return;
     try {
-        await axios.delete(`http://127.0.0.1:3000/api/students/${id}/note/${noteId}`);
+        await axios.delete(`/api/students/${id}/note/${noteId}`);
         toast.info("Not silindi.");
         fetchData();
     } catch (error) { toast.error("Silinemedi."); }
@@ -147,7 +147,7 @@ const StudentDetail = () => {
 
   const handleUpdateStudent = async () => {
     try {
-        await axios.put(`http://127.0.0.1:3000/api/students/${id}`, editForm);
+        await axios.put(`/api/students/${id}`, editForm);
         toast.success("✅ Bilgiler güncellendi!");
         setIsEditing(false);
         fetchData();
@@ -157,7 +157,7 @@ const StudentDetail = () => {
   const handlePayment = async () => {
     if (!payAmount || payAmount <= 0) return toast.warn("Geçerli tutar girin!");
     try {
-      await axios.post('http://127.0.0.1:3000/api/payments/add', { studentId: id, amount: payAmount });
+      await axios.post('/api/payments/add', { studentId: id, amount: payAmount });
       toast.success('✅ Ödeme Alındı!');
       setPayAmount('');
       fetchData();
@@ -177,7 +177,7 @@ const handleChangeClass = async () => {
   if(!window.confirm(confirmMsg + "\n\nOnaylıyor musunuz?")) return;
 
   try {
-    await axios.post('http://127.0.0.1:3000/api/students/change-class', { 
+    await axios.post('/api/students/change-class', { 
         studentId: id, 
         newClassId: selectedClass,
         newTotalAmount: newTotalFee,

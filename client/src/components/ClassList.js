@@ -13,7 +13,7 @@ const ClassList = () => {
 
   const fetchClasses = async () => {
     try {
-      const res = await axios.get('http://127.0.0.1:3000/api/classes');
+      const res = await axios.get('/api/classes');
       setClasses(res.data);
     } catch (error) {
       console.error("Hata", error);
@@ -23,7 +23,7 @@ const ClassList = () => {
   const handleDelete = async (id) => {
     if(window.confirm("Bu sınıfı silmek istediğine emin misin? İçindeki öğrenciler 'Sınıfsız' durumuna düşecek.")) {
         try {
-            await axios.delete(`http://127.0.0.1:3000/api/classes/${id}`);
+            await axios.delete(`/api/classes/${id}`);
             toast.success("Sınıf silindi.");
             fetchClasses();
         } catch (error) { toast.error("Silinemedi."); }

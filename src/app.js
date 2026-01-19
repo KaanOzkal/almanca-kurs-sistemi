@@ -2,7 +2,7 @@ const express = require('express');
 const cors = require('cors');
 const mongoose = require('mongoose');
 const dotenv = require('dotenv');
-const path = require('path'); // Path kütüphanesini eklemeyi unutma!
+const path = require('path');
 
 dotenv.config();
 
@@ -17,15 +17,31 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB Veritabanına Bağlandı!'))
     .catch((err) => console.error('❌ Veritabanı Hatası:', err));
 
-// Rotalar (Senin oluşturduğun rotalar buraya gelecek)
-// app.use('/api/students', require('./routes/studentRoutes')); 
-// (Buradaki rotalarını kendi dosyana göre düzenle veya olduğu gibi bırak)
+// --- 🚦 API ROTALARI (BURASI ÇOK ÖNEMLİ) ---
+// Senin routes klasöründeki dosya isimlerin neyse onları buraya yazmalısın.
+// Örnek: routes/students.js, routes/classes.js gibi...
+
+try {
+    // Öğrenci İşlemleri için:
+    app.use('/api/students', require('./routes/studentRoutes')); 
+    
+    // Sınıf İşlemleri için (Eğer dosya adın classRoutes.js ise):
+    app.use('/api/classes', require('./routes/classRoutes')); 
+
+    // Yoklama veya diğerleri varsa onları da ekle:
+    // app.use('/api/attendance', require('./routes/attendanceRoutes'));
+
+} catch (error) {
+    console.error("⚠️ Rota dosyaları bulunamadı! Lütfen './src/routes' klasörünü kontrol et.", error.message);
+}
+
+// ---------------------------------------------
+
 
 // --- 🌍 PRODUCTION (CANLI) AYARLARI ---
-// 1. React'in "build" klasörünü statik olarak sun
 app.use(express.static(path.join(__dirname, '../client/build')));
 
-// 2. Diğer tüm istekleri React'e yönlendir (Regex /.*/ kullanıyoruz!)
+// Diğer tüm istekleri React'e yönlendir
 app.get(/.*/, (req, res) => {
     res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
 });

@@ -18,8 +18,8 @@ const StudentList = () => {
 
   const fetchData = async () => {
     try {
-      const sRes = await axios.get('http://127.0.0.1:3000/api/students');
-      const cRes = await axios.get('http://127.0.0.1:3000/api/classes');
+      const sRes = await axios.get('/api/students');
+      const cRes = await axios.get('/api/classes');
       setStudents(sRes.data);
       setClasses(cRes.data);
     } catch (error) {
@@ -30,7 +30,7 @@ const StudentList = () => {
   const handleDelete = async (id) => {
     if (window.confirm("Bu öğrenciyi ve tüm verilerini silmek istediğinize emin misiniz?")) {
       try {
-        await axios.delete(`http://127.0.0.1:3000/api/students/${id}`);
+        await axios.delete(`/api/students/${id}`);
         toast.success("Öğrenci silindi 👋");
         fetchData(); 
       } catch (error) { toast.error("Silme başarısız!"); }

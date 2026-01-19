@@ -23,7 +23,7 @@ const AddStudent = () => {
   useEffect(() => {
     const fetchClasses = async () => {
       try {
-        const res = await axios.get('http://localhost:3000/api/classes');
+        const res = await axios.get('/api/classes');
         setClasses(res.data);
       } catch (error) {
         console.error("Sınıflar alınamadı");
@@ -39,7 +39,7 @@ const AddStudent = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/register-student', formData);
+      await axios.post('/api/register-student', formData);
       alert('✅ Öğrenci ve Ödeme Bilgisi Kaydedildi!');
       navigate('/');
     } catch (error) {

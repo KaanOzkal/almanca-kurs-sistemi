@@ -33,7 +33,7 @@ const ClassDetail = () => {
 
   const fetchClassData = async () => {
     try {
-      const res = await axios.get(`http://127.0.0.1:3000/api/classes/${id}`);
+      const res = await axios.get(`/api/classes/${id}`);
       setClassData(res.data);
       
       setEditForm({
@@ -48,7 +48,7 @@ const ClassDetail = () => {
   const fetchAttendanceData = async () => {
     setLoadingAttendance(true);
     try {
-        const res = await axios.get(`http://127.0.0.1:3000/api/attendance/${id}?date=${selectedDate}`);
+        const res = await axios.get(`/api/attendance/${id}?date=${selectedDate}`);
         const records = res.data;
         
         // Gelen veriyi state formatına çevir
@@ -88,7 +88,7 @@ const ClassDetail = () => {
               status: attendance[studentId]
           }));
 
-          await axios.post('http://127.0.0.1:3000/api/attendance', {
+          await axios.post('/api/attendance', {
               classId: id,
               date: selectedDate,
               records
@@ -102,7 +102,7 @@ const ClassDetail = () => {
   // --- SINIF GÜNCELLEME ---
   const handleUpdateClass = async () => {
     try {
-        await axios.put(`http://127.0.0.1:3000/api/classes/${id}`, editForm);
+        await axios.put(`/api/classes/${id}`, editForm);
         toast.success("✅ Sınıf Bilgileri Güncellendi!");
         setIsEditing(false);
         fetchClassData();
@@ -112,7 +112,7 @@ const ClassDetail = () => {
   const handleDeleteClass = async () => {
     if (window.confirm("Bu sınıfı silmek istediğine emin misin?")) {
         try {
-            await axios.delete(`http://127.0.0.1:3000/api/classes/${id}`);
+            await axios.delete(`/api/classes/${id}`);
             navigate('/'); 
         } catch (error) { toast.error("Silinemedi."); }
     }

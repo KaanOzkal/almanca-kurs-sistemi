@@ -20,7 +20,7 @@ const Dashboard = () => {
   const fetchDashboardData = async () => {
     try {
       // DİKKAT: localhost yerine 127.0.0.1 kullanıyoruz (Windows hatası olmasın diye)
-      const res = await axios.get('http://127.0.0.1:3000/api/dashboard');
+      const res = await axios.get('/api/dashboard');
       
       setStats(res.data.stats);
       setChartData(res.data.chartData);

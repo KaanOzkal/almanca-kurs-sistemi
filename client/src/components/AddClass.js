@@ -13,7 +13,7 @@ const AddClass = () => {
   const handleSubmit = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/create-class', formData);
+      await axios.post('/api/create-class', formData);
       alert('✅ Sınıf Başarıyla Oluşturuldu!');
       navigate('/'); // Listeye dön
     } catch (error) {

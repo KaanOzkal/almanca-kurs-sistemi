@@ -21,9 +21,9 @@ const ClassManager = () => {
   const fetchClasses = async () => {
     try {
       // 1. Veriyi çekmeye çalışıyoruz
-      console.log("📡 İstek gönderiliyor: http://localhost:3000/api/classes");
+      console.log("📡 İstek gönderiliyor: /api/classes");
       
-      const res = await axios.get('http://localhost:3000/api/classes');
+      const res = await axios.get('/api/classes');
       
       // 2. Veri geldi mi?
       console.log("✅ Veri Geldi:", res.data);
@@ -39,7 +39,7 @@ const ClassManager = () => {
   const handleCreate = async (e) => {
     e.preventDefault();
     try {
-      await axios.post('http://localhost:3000/api/create-class', formData);
+      await axios.post('/api/create-class', formData);
       toast.success('✅ Sınıf Başarıyla Oluşturuldu!');
       setFormData({ ...formData, name: '' }); // Formu temizle
       fetchClasses(); // Listeyi yenile
