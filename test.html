@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Kurs Yönetim Paneli </title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; max-width: 800px; margin: auto; background-color: #f4f4f4; }
+        .box { background: white; border: 1px solid #ddd; padding: 20px; margin-bottom: 20px; border-radius: 8px; box-shadow: 0 2px 4px rgba(0,0,0,0.1); }
+        h3 { margin-top: 0; color: #333; }
+        input { display: block; width: 95%; margin: 5px 0 15px 0; padding: 8px; border: 1px solid #ddd; border-radius: 4px; }
+        button { background-color: #007bff; color: white; border: none; padding: 10px 20px; cursor: pointer; border-radius: 4px; }
+        button:hover { background-color: #0056b3; }
+        .success { color: green; font-weight: bold; }
+        .error { color: red; font-weight: bold; }
+        
+        /* Tablo Stilleri */
+        table { width: 100%; border-collapse: collapse; margin-top: 10px; }
+        th, td { border: 1px solid #ddd; padding: 8px; text-align: left; }
+        th { background-color: #333; color: white; }
+        tr:nth-child(even) { background-color: #f2f2f2; }
+    </style>
+</head>
+<body>
+
+    <h1 style="text-align: center;">Kurs Yönetim Sistemi 🏫</h1>
+
+    <div class="box">
+        <h3>📋 Kayıtlı Öğrenciler</h3>
+        <button onclick="getStudents()" style="background-color: #28a745;">Listeyi Yenile</button>
+        <table id="studentTable">
+            <thead>
+                <tr>
+                    <th>Ad Soyad</th>
+                    <th>TC No</th>
+                    <th>Sınıfı</th>
+                    <th>Telefon</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td colspan="4">Yükleniyor...</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="box">
+        <h3>1. Yeni Sınıf Oluştur</h3>
+        <input type="text" id="className" placeholder="Sınıf Adı (Örn: A1 Sabah)">
+        <input type="text" id="classLevel" placeholder="Seviye (Örn: A1)">
+        <button onclick="createClass()">Sınıfı Kaydet</button>
+        <p id="classResult"></p>
+    </div>
+
+    <div class="box">
+        <h3>2. Öğrenci Kaydet</h3>
+        <input type="text" id="stuName" placeholder="Ad">
+        <input type="text" id="stuSurname" placeholder="Soyad">
+        <input type="text" id="stuTc" placeholder="TC Kimlik No">
+        <input type="text" id="stuPhone" placeholder="Telefon">
+        <input type="number" id="stuPrice" placeholder="Ücret (TL)">
+        <input type="text" id="classIdInput" placeholder="Sınıf ID'si (Yukarıdan kopyala)">
+        <button onclick="registerStudent()">Öğrenciyi Kaydet</button>
+        <p id="studentResult"></p>
+    </div>
+
+    <script>
+        // Sayfa açılınca listeyi getir
+        window.onload = getStudents;
+
+        async function getStudents() {
+            try {
+                const res = await fetch('http://localhost:3000/api/students');
+                const students = await res.json();
+                
+                const tbody = document.querySelector('#studentTable tbody');
+                tbody.innerHTML = '';
+
+                students.forEach(st => {
+                    // Sınıf bilgisi populate ile geldiği için st.currentClass.name diyebiliriz
+                    const className = st.currentClass ? st.currentClass.name : 'Sınıfsız';
+                    
+                    const row = `<tr>
+                        <td>${st.firstName} ${st.lastName}</td>
+                        <td>${st.tcIdentity}</td>
+                        <td>${className}</td>
+                        <td>${st.phone}</td>
+                    </tr>`;
+                    tbody.innerHTML += row;
+                });
+            } catch (err) {
+                console.error(err);
+            }
+        }
+
+        async function createClass() {
+            const data = {
+                name: document.getElementById('className').value,
+                level: document.getElementById('classLevel').value
+            };
+            const res = await fetch('http://localhost:3000/api/create-class', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            const result = await res.json();
+            
+            const msg = document.getElementById('classResult');
+            if(res.ok) {
+                msg.innerText = "Sınıf ID: " + result._id;
+                msg.className = "success";
+                // ID'yi otomatik olarak alttaki inputa doldur
+                document.getElementById('classIdInput').value = result._id; 
+            } else {
+                msg.innerText = "Hata: " + JSON.stringify(result);
+                msg.className = "error";
+            }
+        }
+
+        async function registerStudent() {
+            const data = {
+                firstName: document.getElementById('stuName').value,
+                lastName: document.getElementById('stuSurname').value,
+                tcIdentity: document.getElementById('stuTc').value,
+                phone: document.getElementById('stuPhone').value,
+                price: document.getElementById('stuPrice').value,
+                classId: document.getElementById('classIdInput').value
+            };
+            const res = await fetch('http://localhost:3000/api/register-student', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify(data)
+            });
+            
+            const msg = document.getElementById('studentResult');
+            if(res.ok) {
+                msg.innerText = "Kayıt Başarılı!";
+                msg.className = "success";
+                getStudents(); // Listeyi güncelle
+            } else {
+                msg.innerText = "Hata!";
+                msg.className = "error";
+            }
+        }
+    </script>
+</body>
+</html>

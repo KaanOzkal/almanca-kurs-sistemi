@@ -1,0 +1,20 @@
+# --- GEREKSİZ KÜTÜPHANELER ---
+node_modules
+client/node_modules
+server/node_modules
+
+# --- GİZLİ ŞİFRELER (ASLA YÜKLEME) ---
+.env
+client/.env
+server/.env
+
+# --- WHATSAPP OTURUMU (BAŞKASI GİRMESİN) ---
+.wwebjs_auth
+.wwebjs_cache
+session
+
+# --- SİSTEM DOSYALARI ---
+.DS_Store
+dist
+build
+npm-debug.log

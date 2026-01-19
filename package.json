@@ -1,0 +1,26 @@
+{
+  "name": "almanca-kurs-sistemi",
+  "version": "1.0.0",
+  "description": "Almanca Kursu Yönetim Paneli Backend",
+  "main": "src/app.js",
+  "scripts": {
+    "start": "node src/app.js",
+    "dev": "nodemon src/app.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "dependencies": {
+    "bcryptjs": "^3.0.3",
+    "cors": "^2.8.5",
+    "dotenv": "^17.2.3",
+    "express": "^5.2.1",
+    "jsonwebtoken": "^9.0.3",
+    "mongoose": "^9.1.3",
+    "qrcode-terminal": "^0.12.0",
+    "whatsapp-web.js": "^1.34.4"
+  },
+  "devDependencies": {
+    "nodemon": "^3.1.11"
+  }
+}
