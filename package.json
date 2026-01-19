@@ -6,7 +6,7 @@
   "scripts": {
     "start": "node src/app.js",
     "dev": "nodemon src/app.js",
-    "build": "npm install && cd client && npm install && npm run build"
+    "build": "GENERATE_SOURCEMAP=false react-scripts build"
   },
   "keywords": [],
   "author": "",
