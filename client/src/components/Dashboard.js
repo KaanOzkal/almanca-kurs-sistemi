@@ -7,11 +7,12 @@ const Dashboard = () => {
   const [stats, setStats] = useState({
     totalStudents: 0,
     totalClasses: 0,
-    totalRevenue: 0,     // Toplam Ciro (Alacaklar Dahil)
-    collectedRevenue: 0  // Net Gelir (Kasa)
+    totalRevenue: 0,    // Toplam Ciro (Alacaklar Dahil)
+    collectedRevenue: 0 // Net Gelir (Kasa)
   });
   const [chartData, setChartData] = useState([]);
   const [activities, setActivities] = useState([]);
+  const [loading, setLoading] = useState(true); // Yüklenme durumu eklendi
 
   useEffect(() => {
     fetchDashboardData();
@@ -19,20 +20,39 @@ const Dashboard = () => {
 
   const fetchDashboardData = async () => {
     try {
-      // DİKKAT: localhost yerine 127.0.0.1 kullanıyoruz (Windows hatası olmasın diye)
+      // DİKKAT: localhost veya 127.0.0.1 YAZMIYORUZ.
+      // Sadece /api/... yazıyoruz ki Render'da çalışsın.
       const res = await axios.get('/api/dashboard');
       
-      setStats(res.data.stats);
-      setChartData(res.data.chartData);
-      setActivities(res.data.activities);
+      // Gelen veride stats yoksa patlamasın diye kontrol ekliyoruz
+      if (res.data) {
+          setStats(res.data.stats || { totalStudents: 0, totalClasses: 0, totalRevenue: 0, collectedRevenue: 0 });
+          setChartData(res.data.chartData || []);
+          setActivities(res.data.activities || []);
+      }
       
-    } catch (error) { console.error("Dashboard veri hatası:", error); }
+    } catch (error) { 
+        console.error("Dashboard veri hatası:", error);
+        // Hata olsa bile kullanıcıya boş dashboard gösterelim, beyaz ekran vermesin.
+    } finally {
+        setLoading(false);
+    }
   };
 
-  // Para formatı için yardımcı fonksiyon (10000 -> 10.000 TL)
+  // Para formatı için yardımcı fonksiyon (10000 -> 10.000 ₺)
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(amount);
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(amount || 0);
   };
+
+  if (loading) {
+      return (
+        <div className="d-flex justify-content-center align-items-center" style={{ height: '80vh' }}>
+            <div className="spinner-border text-primary" role="status">
+                <span className="visually-hidden">Yükleniyor...</span>
+            </div>
+        </div>
+      );
+  }
 
   return (
     <div className="container-fluid">
@@ -48,7 +68,7 @@ const Dashboard = () => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs font-weight-bold text-primary text-uppercase mb-1">Toplam Öğrenci</div>
-                  <div className="h5 mb-0 font-weight-bold text-gray-800">{stats.totalStudents}</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">{stats?.totalStudents || 0}</div>
                 </div>
                 <div className="col-auto">
                   <FaUserGraduate size={30} className="text-gray-300 text-primary opacity-50"/>
@@ -65,7 +85,7 @@ const Dashboard = () => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs font-weight-bold text-info text-uppercase mb-1">Aktif Sınıflar</div>
-                  <div className="h5 mb-0 font-weight-bold text-gray-800">{stats.totalClasses}</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">{stats?.totalClasses || 0}</div>
                 </div>
                 <div className="col-auto">
                   <FaChalkboard size={30} className="text-gray-300 text-info opacity-50"/>
@@ -82,7 +102,7 @@ const Dashboard = () => {
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs font-weight-bold text-warning text-uppercase mb-1">Toplam Ciro (Sözleşme)</div>
-                  <div className="h5 mb-0 font-weight-bold text-gray-800">{formatCurrency(stats.totalRevenue)}</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">{formatCurrency(stats?.totalRevenue)}</div>
                 </div>
                 <div className="col-auto">
                   <FaMoneyBillWave size={30} className="text-gray-300 text-warning opacity-50"/>
@@ -92,14 +112,14 @@ const Dashboard = () => {
           </div>
         </div>
 
-        {/* 4. NET GELİR (Kasa - YENİ KUTU) */}
+        {/* 4. NET GELİR (Kasa) */}
         <div className="col-xl-3 col-md-6 mb-4">
           <div className="card border-left-success shadow h-100 py-2 border-0 border-start border-4 border-success">
             <div className="card-body">
               <div className="row no-gutters align-items-center">
                 <div className="col mr-2">
                   <div className="text-xs font-weight-bold text-success text-uppercase mb-1">Net Gelir (Kasa)</div>
-                  <div className="h5 mb-0 font-weight-bold text-gray-800">{formatCurrency(stats.collectedRevenue)}</div>
+                  <div className="h5 mb-0 font-weight-bold text-gray-800">{formatCurrency(stats?.collectedRevenue)}</div>
                 </div>
                 <div className="col-auto">
                   <FaLiraSign size={30} className="text-gray-300 text-success opacity-50"/>
@@ -139,7 +159,7 @@ const Dashboard = () => {
                     <h6 className="m-0 font-weight-bold text-dark">Son İşlemler</h6>
                     <FaHistory className="text-muted"/>
                 </div>
-                <div className="card-body p-0">
+                <div className="card-body p-0" style={{overflowY: 'auto'}}>
                     <ul className="list-group list-group-flush">
                         {activities.length > 0 ? (
                             activities.map((act) => (
