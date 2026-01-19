@@ -13,18 +13,47 @@ const logActivity = async (action, description) => {
   }
 };
 
-// 1. Yeni Sınıf Oluştur
+//// 1. Yeni Sınıf Oluştur (GÜNCELLENMİŞ VERSİYON)
 exports.createClass = async (req, res) => {
   try {
-    const newClass = new Class(req.body);
+    // 1. Terminale gelen veriyi yazdıralım (Frontend ne gönderiyor görelim)
+    console.log("📥 Frontend'den gelen sınıf verisi:", req.body);
+
+    const { name, day, time, quota, price } = req.body;
+
+    // 2. Manuel Kontrol: İsim var mı?
+    if (!name) {
+        console.log("❌ HATA: Sınıf adı boş geldi!");
+        return res.status(400).json({ error: "Sınıf adı zorunludur!" });
+    }
+
+    // 3. Modeli Oluştur
+    const newClass = new Class({
+        name,
+        day,
+        time,
+        quota,
+        price
+    });
+
+    // 4. Kaydet
     await newClass.save();
     
-    // Log Tut
-    await logActivity('Sınıf Oluşturuldu', `${newClass.name} (${newClass.level}) sınıfı sisteme eklendi.`);
+    // Log Tut (level alanı modelde yoksa hata vermesin diye kontrol ettim)
+    await logActivity('Sınıf Oluşturuldu', `${newClass.name} sınıfı sisteme eklendi.`);
 
+    console.log("✅ Sınıf başarıyla veritabanına kaydedildi:", newClass);
     res.status(201).json(newClass);
+
   } catch (error) {
-    res.status(400).json({ error: error.message });
+    // 5. HATAYI DETAYLI GÖSTER (Terminalde hatayı oku!)
+    console.error("❌ Sınıf Oluşturma Hatası (Mongoose):", error);
+    
+    // Frontend'e hatanın tam sebebini gönder
+    res.status(400).json({ 
+        message: "Kayıt Başarısız", 
+        error: error.message 
+    });
   }
 };
 
