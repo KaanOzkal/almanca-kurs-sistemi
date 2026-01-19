@@ -29,3 +29,19 @@ mongoose.connect(process.env.MONGO_URI)
   .catch((err) => {
     console.error('❌ Veritabanı Bağlantı Hatası:', err);
   });
+  // ... (Yukarıdaki kodlar aynı kalsın) ...
+
+// --- 🌍 PRODUCTION (CANLI) AYARLARI ---
+const path = require('path');
+
+// 1. React'in "build" klasörünü statik olarak sun
+// (Render önce React'i build edecek, çıkan dosyaları buradan sunacağız)
+app.use(express.static(path.join(__dirname, '../client/build')));
+
+// 2. Diğer tüm istekleri React'e yönlendir (Sayfa yenileyince 404 vermesin diye)
+app.get('*', (req, res) => {
+    res.sendFile(path.join(__dirname, '../client/build', 'index.html'));
+});
+// ----------------------------------------
+
+// (app.listen ve mongoose.connect kısmı burada kalsın...)
