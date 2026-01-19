@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from 'react';
+import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -8,26 +8,20 @@ import Layout from './components/Layout';
 import Dashboard from './components/Dashboard';
 import StudentList from './components/StudentList';
 import AddStudent from './components/AddStudent';
-import ClassManager from './components/ClassManager'; 
+import ClassManager from './components/ClassManager';
 import ClassDetail from './components/ClassDetail';
 import StudentDetail from './components/StudentDetail';
 
+// Login importunu sildik.
 
+function App() {
+  // Authentication (State, useEffect vs.) kodlarının hepsini sildik.
+  // Artık direkt yönlendirme yapıyoruz.
 
-  // 2. SAYFA YÜKLENİNCE KONTROL ET
-  useEffect(() => {
-    const token = localStorage.getItem('token');
-    if (token) {
-      setIsAuthenticated(true);
-    }
-  }, []);
-
-
-  // --- GİRİŞ YAPILMIŞSA SİSTEMİ GÖSTER ---
   return (
     <Router>
-      {/* Layout'a çıkış fonksiyonunu gönderiyoruz ki Navbar'da buton koyabilesin */}
-      <Layout onLogout={handleLogout}>
+      {/* Layout'tan onLogout prop'unu kaldırdık çünkü artık çıkış yapma yok */}
+      <Layout>
         <Routes>
           {/* Ana Sayfa */}
           <Route path="/" element={<Dashboard />} />
