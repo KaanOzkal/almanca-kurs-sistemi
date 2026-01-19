@@ -3,6 +3,7 @@ const Class = require('../models/Class');
 const Payment = require('../models/Payment');
 const ActivityLog = require('../models/ActivityLog');
 const Attendance = require('../models/Attendance');
+
 // --- YARDIMCI FONKSİYON: Log Kaydetme ---
 // Bu fonksiyonu aşağıda tekrar tekrar kullanacağız
 const logActivity = async (action, description) => {
@@ -13,7 +14,7 @@ const logActivity = async (action, description) => {
   }
 };
 
-//// 1. Yeni Sınıf Oluştur (GÜNCELLENMİŞ VERSİYON)
+// 1. Yeni Sınıf Oluştur (GÜNCELLENMİŞ VERSİYON)
 exports.createClass = async (req, res) => {
   try {
     // 1. Terminale gelen veriyi yazdıralım (Frontend ne gönderiyor görelim)
@@ -39,7 +40,7 @@ exports.createClass = async (req, res) => {
     // 4. Kaydet
     await newClass.save();
     
-    // Log Tut (level alanı modelde yoksa hata vermesin diye kontrol ettim)
+    // Log Tut
     await logActivity('Sınıf Oluşturuldu', `${newClass.name} sınıfı sisteme eklendi.`);
 
     console.log("✅ Sınıf başarıyla veritabanına kaydedildi:", newClass);
@@ -143,7 +144,7 @@ exports.addPayment = async (req, res) => {
 
     await paymentRecord.save();
     
-    // Log Tut (Öğrenci ismini bulmak için ek sorgu yapabiliriz ama performans için ID yazıyoruz)
+    // Log Tut
     await logActivity('Ödeme Alındı', `Öğrenci ID: ${studentId} için ${amount} TL tahsil edildi.`);
 
     res.status(200).json(paymentRecord);
@@ -161,6 +162,7 @@ exports.getClassDetail = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // 8. Sınıf Değiştir (Transfer, Fiyat Güncelleme ve SIFIRLAMA)
 exports.changeClass = async (req, res) => {
   try {
@@ -317,6 +319,7 @@ exports.getDashboardData = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // 12. Öğrenci Bilgilerini Güncelle (Edit)
 exports.updateStudent = async (req, res) => {
   try {
@@ -336,6 +339,7 @@ exports.updateStudent = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // 13. Sınıf Bilgilerini Güncelle
 exports.updateClass = async (req, res) => {
   try {
@@ -355,6 +359,7 @@ exports.updateClass = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // 14. Öğrenciye Özel Not Ekle
 exports.addStudentNote = async (req, res) => {
   try {
@@ -385,6 +390,7 @@ exports.deleteStudentNote = async (req, res) => {
     res.status(500).json({ error: error.message });
   }
 };
+
 // 16. Yoklama Getir (Tarihe Göre)
 exports.getAttendance = async (req, res) => {
   try {
