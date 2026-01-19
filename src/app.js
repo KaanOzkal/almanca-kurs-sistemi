@@ -17,24 +17,17 @@ mongoose.connect(process.env.MONGO_URI)
     .then(() => console.log('✅ MongoDB Veritabanına Bağlandı!'))
     .catch((err) => console.error('❌ Veritabanı Hatası:', err));
 
-// --- 🚦 API ROTALARI (BURASI ÇOK ÖNEMLİ) ---
-// Senin routes klasöründeki dosya isimlerin neyse onları buraya yazmalısın.
-// Örnek: routes/students.js, routes/classes.js gibi...
-
+// --- 🚦 API ROTALARI (DÜZELTİLEN KISIM) ---
+// Senin api.js dosyan her şeyi içerdiği için tek seferde yüklüyoruz.
 try {
-    // Öğrenci İşlemleri için:
-    app.use('/api/students', require('./routes/studentRoutes')); 
-    
-    // Sınıf İşlemleri için (Eğer dosya adın classRoutes.js ise):
-    app.use('/api/classes', require('./routes/classRoutes')); 
-
-    // Yoklama veya diğerleri varsa onları da ekle:
-    // app.use('/api/attendance', require('./routes/attendanceRoutes'));
+    // '/api' gelen her şeyi 'routes/api.js' dosyasına gönder
+    // Sonuç: /api/students, /api/classes, /api/dashboard olarak çalışacak.
+    app.use('/api', require('./routes/api')); 
+    console.log("✅ Rotalar (api.js) başarıyla yüklendi.");
 
 } catch (error) {
-    console.error("⚠️ Rota dosyaları bulunamadı! Lütfen './src/routes' klasörünü kontrol et.", error.message);
+    console.error("⚠️ Rota dosyası 'routes/api.js' bulunamadı!", error.message);
 }
-
 // ---------------------------------------------
 
 
