@@ -11,11 +11,8 @@ import AddStudent from './components/AddStudent';
 import ClassManager from './components/ClassManager'; 
 import ClassDetail from './components/ClassDetail';
 import StudentDetail from './components/StudentDetail';
-import Login from './components/Login'; // YENİ: Login bileşenini ekledik
 
-function App() {
-  // 1. GİRİŞ DURUMU (State)
-  const [isAuthenticated, setIsAuthenticated] = useState(false);
+
 
   // 2. SAYFA YÜKLENİNCE KONTROL ET
   useEffect(() => {
@@ -25,26 +22,6 @@ function App() {
     }
   }, []);
 
-  // 3. GİRİŞ YAPILINCA ÇALIŞACAK FONKSİYON
-  const handleLogin = () => {
-    setIsAuthenticated(true);
-  };
-
-  // 4. ÇIKIŞ YAPILINCA ÇALIŞACAK FONKSİYON
-  const handleLogout = () => {
-    localStorage.removeItem('token');
-    setIsAuthenticated(false);
-  };
-
-  // --- EĞER GİRİŞ YAPILMAMIŞSA SADECE LOGIN GÖSTER ---
-  if (!isAuthenticated) {
-    return (
-      <>
-        <ToastContainer position="top-right" autoClose={3000} />
-        <Login onLoginSuccess={handleLogin} />
-      </>
-    );
-  }
 
   // --- GİRİŞ YAPILMIŞSA SİSTEMİ GÖSTER ---
   return (
