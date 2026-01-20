@@ -3,7 +3,9 @@ const Class = require('../models/Class');
 const Payment = require('../models/Payment');
 const ActivityLog = require('../models/ActivityLog');
 const Attendance = require('../models/Attendance');
-
+const User = require('../models/User'); // Yeni oluşturduğumuz model
+const bcrypt = require('bcryptjs');     // Şifre şifreleme
+const jwt = require('jsonwebtoken');    // Giriş bileti (Token) üretme
 // --- YARDIMCI FONKSİYON: Log Kaydetme ---
 // Bu fonksiyonu aşağıda tekrar tekrar kullanacağız
 const logActivity = async (action, description) => {
@@ -433,4 +435,70 @@ exports.saveAttendance = async (req, res) => {
   } catch (error) {
     res.status(500).json({ error: error.message });
   }
+};
+
+// --- KULLANICI İŞLEMLERİ (AUTH) ---
+
+// 1. Kayıt Ol (Sadece ilk kullanıcıyı oluşturmak için kullanacaksın)
+exports.register = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Kullanıcı zaten var mı?
+        const existingUser = await User.findOne({ username });
+        if (existingUser) {
+            return res.status(400).json({ message: "Bu kullanıcı adı zaten alınmış." });
+        }
+
+        // Şifreyi şifrele (Hash)
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Yeni kullanıcıyı kaydet
+        const newUser = new User({
+            username,
+            password: hashedPassword
+        });
+
+        await newUser.save();
+        res.status(201).json({ message: "Kullanıcı başarıyla oluşturuldu!" });
+
+    } catch (error) {
+        res.status(500).json({ message: "Kayıt hatası", error: error.message });
+    }
+};
+
+// 2. Giriş Yap (Login)
+exports.login = async (req, res) => {
+    try {
+        const { username, password } = req.body;
+
+        // Kullanıcıyı bul
+        const user = await User.findOne({ username });
+        if (!user) {
+            return res.status(400).json({ message: "Kullanıcı adı veya şifre hatalı!" });
+        }
+
+        // Şifreyi kontrol et
+        const isMatch = await bcrypt.compare(password, user.password);
+        if (!isMatch) {
+            return res.status(400).json({ message: "Kullanıcı adı veya şifre hatalı!" });
+        }
+
+        // Token oluştur (Bilet ver)
+        const token = jwt.sign(
+            { id: user._id, username: user.username },
+            process.env.JWT_SECRET, // Render'a eklediğin o gizli anahtar
+            { expiresIn: '1d' } // Token 1 gün geçerli olsun
+        );
+
+        res.json({
+            message: "Giriş başarılı!",
+            token: token,
+            username: user.username
+        });
+
+    } catch (error) {
+        res.status(500).json({ message: "Giriş hatası", error: error.message });
+    }
 };

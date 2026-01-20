@@ -20,4 +20,6 @@ router.post('/students/:id/note', mainController.addStudentNote);
 router.delete('/students/:studentId/note/:noteId', mainController.deleteStudentNote);
 router.get('/attendance/:classId', mainController.getAttendance);
 router.post('/attendance', mainController.saveAttendance);
+router.post('/register', mainController.register); // Kayıt ol
+router.post('/login', mainController.login);       // Giriş yap
 module.exports = router;
