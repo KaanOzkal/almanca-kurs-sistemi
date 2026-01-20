@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react'; // State ve Effect ekledik
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import { ToastContainer } from 'react-toastify';
 import 'react-toastify/dist/ReactToastify.css';
@@ -12,16 +12,30 @@ import ClassManager from './components/ClassManager';
 import ClassDetail from './components/ClassDetail';
 import StudentDetail from './components/StudentDetail';
 
-// Login importunu sildik.
+// --- YENİ EKLENEN: Login Bileşeni ---
+import Login from './components/Login';
 
 function App() {
-  // Authentication (State, useEffect vs.) kodlarının hepsini sildik.
-  // Artık direkt yönlendirme yapıyoruz.
+  // 1. KONTROL: Başlangıçta cebimizde bilet (Token) var mı bakıyoruz.
+  const [token, setToken] = useState(localStorage.getItem('token'));
 
+  // Çıkış yapma fonksiyonu (Bunu Layout'a gönderebiliriz)
+  const handleLogout = () => {
+    localStorage.removeItem('token'); // Bileti yırt
+    setToken(null); // State'i boşalt
+    window.location.href = '/'; // Ana sayfaya at (Login ekranı gelir)
+  };
+
+  // 2. MANTIK: Eğer Token YOKSA, siteyi gösterme, sadece Login ekranını göster.
+  if (!token) {
+    return <Login />;
+  }
+
+  // 3. EĞER TOKEN VARSA: Asıl siteyi göster 
   return (
     <Router>
-      {/* Layout'tan onLogout prop'unu kaldırdık çünkü artık çıkış yapma yok */}
-      <Layout>
+      {/* Layout'a onLogout özelliğini gönderiyoruz ki oraya çıkış butonu koyabilesin */}
+      <Layout onLogout={handleLogout}>
         <Routes>
           {/* Ana Sayfa */}
           <Route path="/" element={<Dashboard />} />
