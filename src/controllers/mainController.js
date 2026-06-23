@@ -4,31 +4,26 @@ const Payment = require('../models/Payment');
 const ActivityLog = require('../models/ActivityLog');
 const Attendance = require('../models/Attendance');
 
-// --- YARDIMCI FONKSİYON: Log Kaydetme ---
-// Bu fonksiyonu aşağıda tekrar tekrar kullanacağız
 const logActivity = async (action, description) => {
-  try {
-    await ActivityLog.create({ action, description });
-  } catch (err) {
+          try {
+    await      ActivityLog.create({ action, description });
+  } catch (err)    {
     console.error("Log hatası:", err);
   }
 };
 
-// 1. Yeni Sınıf Oluştur (GÜNCELLENMİŞ VERSİYON)
 exports.createClass = async (req, res) => {
   try {
-    // 1. Terminale gelen veriyi yazdıralım (Frontend ne gönderiyor görelim)
     console.log("📥 Frontend'den gelen sınıf verisi:", req.body);
 
     const { name, day, time, quota, price } = req.body;
 
-    // 2. Manuel Kontrol: İsim var mı?
     if (!name) {
-        console.log("❌ HATA: Sınıf adı boş geldi!");
-        return res.status(400).json({ error: "Sınıf adı zorunludur!" });
+        console.log("❌ Sınıf adı boş !");
+        return res.status(400).json({ error: "Sınıf adı zorunlu krdşm!" });
     }
 
-    // 3. Modeli Oluştur
+    // 11.06.2026 
     const newClass = new Class({
         name,
         day,
@@ -438,8 +433,8 @@ const jwt = require('jsonwebtoken'); // Token üretmek için bu kalsın
 
 // --- SABİT KULLANICI BİLGİLERİ ---
 // Buraya istediğin kullanıcı adı ve şifreyi yaz
-const ADMIN_USERNAME = "admin";
-const ADMIN_PASSWORD = "asd123qwe";
+const ADMIN_USERNAME = "berliner";
+const ADMIN_PASSWORD = "berliner2009";
 // ---------------------------------
 
 exports.login = async (req, res) => {
