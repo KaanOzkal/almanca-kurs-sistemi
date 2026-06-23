@@ -140,7 +140,7 @@ exports.addPayment = async (req, res) => {
     await paymentRecord.save();
     
     // Log Tut
-    await logActivity('Ödeme Alındı', `Öğrenci ID: ${studentId} için ${amount} TL tahsil edildi.`);
+    await logActivity('Ödeme Alındı', `Öğrenci ID: ${studentId} için ${amount} € tahsil edildi.`);
 
     res.status(200).json(paymentRecord);
   } catch (error) {
@@ -182,7 +182,7 @@ exports.changeClass = async (req, res) => {
         // A) Eski verileri alıp NOT olarak kaydet (Veri kaybını önlemek için)
         const oldPayment = await Payment.findOne({ student: studentId });
         if (oldPayment) {
-            const archiveNote = `--- DÖNEM KAPATILDI ---\nEski Toplam Borç: ${oldPayment.totalAmount} TL\nEski Ödenen: ${oldPayment.paidAmount} TL\nTarih: ${new Date().toLocaleDateString('tr-TR')}`;
+            const archiveNote = `--- DÖNEM KAPATILDI ---\nEski Toplam Borç: ${oldPayment.totalAmount} €\nEski Ödenen: ${oldPayment.paidAmount} €\nTarih: ${new Date().toLocaleDateString('tr-TR')}`;
             
             // Öğrencinin notlarına ekle
             student.notes.push({ text: archiveNote, date: new Date() });

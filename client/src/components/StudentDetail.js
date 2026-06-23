@@ -119,7 +119,7 @@ const StudentDetail = () => {
         doc.setDrawColor(0); doc.setFillColor(240, 240, 240); 
         doc.rect(20, 85, 170, 20, 'F'); 
         doc.setFontSize(14); doc.setTextColor(0, 0, 0);
-        doc.text("ÖDENEN TUTAR:", 30, 98); doc.text(`${selectedPayment.amount} TL`, 90, 98);
+        doc.text("ÖDENEN TUTAR:", 30, 98); doc.text(`${selectedPayment.amount} €`, 90, 98);
 
         doc.setFontSize(11);
         const splitNote = doc.splitTextToSize(`Açıklama: ${receiptNote}`, 170);
@@ -171,7 +171,7 @@ const handleChangeClass = async () => {
   let confirmMsg = `Öğrenciyi seçilen sınıfa transfer edeceksiniz.`;
 
   if(resetPayments) {
-      confirmMsg += `\n\n⚠️ DİKKAT: "Ödemeleri Sıfırla" seçili!\nEski ödeme geçmişi silinecek ve finansal durum (0 TL Ödenen) olarak yeni fiyata göre yeniden başlayacak.`;
+      confirmMsg += `\n\n⚠️ DİKKAT: "Ödemeleri Sıfırla" seçili!\nEski ödeme geçmişi silinecek ve finansal durum (0 € Ödenen) olarak yeni fiyata göre yeniden başlayacak.`;
   }
 
   if(!window.confirm(confirmMsg + "\n\nOnaylıyor musunuz?")) return;
@@ -341,7 +341,7 @@ const handleChangeClass = async () => {
                     <small className="text-muted">{h.note}</small>
                   </div>
                   <div className="d-flex align-items-center">
-                    <span className="fw-bold text-success me-3">+{h.amount} ₺</span>
+                    <span className="fw-bold text-success me-3">+{h.amount} €</span>
                     <button className="btn btn-sm btn-outline-danger" onClick={() => handleOpenReceiptModal(h)}><FaFilePdf /></button>
                   </div>
                 </li>
@@ -359,9 +359,9 @@ const handleChangeClass = async () => {
             <div className="card-header bg-success text-white"><h5 className="mb-0">💰 Finansal Durum</h5></div>
             <div className="card-body">
               <div className="row text-center mb-4">
-                <div className="col-4"><div className="p-3 border rounded bg-light"><small>Toplam</small><h4 className="text-dark">{total} ₺</h4></div></div>
-                <div className="col-4"><div className="p-3 border rounded bg-light"><small>Ödenen</small><h4 className="text-success">{paid} ₺</h4></div></div>
-                <div className="col-4"><div className="p-3 border rounded bg-danger text-white"><small>KALAN</small><h4 className="fw-bold">{remaining} ₺</h4></div></div>
+                <div className="col-4"><div className="p-3 border rounded bg-light"><small>Toplam</small><h4 className="text-dark">{total} €</h4></div></div>
+                <div className="col-4"><div className="p-3 border rounded bg-light"><small>Ödenen</small><h4 className="text-success">{paid} €</h4></div></div>
+                <div className="col-4"><div className="p-3 border rounded bg-danger text-white"><small>KALAN</small><h4 className="fw-bold">{remaining} €</h4></div></div>
               </div>
               {remaining > 0 ? (
                 <div className="p-4 border rounded bg-light">

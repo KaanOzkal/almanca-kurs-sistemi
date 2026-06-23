@@ -99,11 +99,11 @@ const AddStudent = () => {
                 {/* --- SENİN İSTEDİĞİN YENİ ÜCRET ALANLARI --- */}
                 <div className="row">
                   <div className="col-md-6 mb-3">
-                    <label className="fw-bold">Toplam Kurs Ücreti (TL)</label>
+                    <label className="fw-bold">Toplam Kurs Ücreti (€)</label>
                     <input type="number" name="totalFee" className="form-control" placeholder="Örn: 20000" required onChange={handleChange} />
                   </div>
                   <div className="col-md-6 mb-3">
-                    <label className="fw-bold text-success">Alınan Peşinat (TL)</label>
+                    <label className="fw-bold text-success">Alınan Peşinat (€)</label>
                     <input type="number" name="initialPayment" className="form-control" placeholder="Örn: 5000" required onChange={handleChange} />
                     <small className="text-muted">Hiç ödeme almadıysanız 0 yazın.</small>
                   </div>
