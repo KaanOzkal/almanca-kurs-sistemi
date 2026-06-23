@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from 'react';
 import axios from 'axios';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { FaUserGraduate, FaChalkboard, FaMoneyBillWave, FaLiraSign, FaHistory } from 'react-icons/fa';
+import { FaUserGraduate, FaChalkboard, FaMoneyBillWave, FaEuroSign, FaHistory } from 'react-icons/fa';
 
 const Dashboard = () => {
   // Başlangıç değerlerini GARANTİ array [] yapıyoruz
@@ -40,7 +40,8 @@ const Dashboard = () => {
   };
 
   const formatCurrency = (amount) => {
-    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'TRY' }).format(amount || 0);
+    // TRY yerine EUR (Euro) yapıldı. 'tr-TR' kalabilir, böylece 1.000,00 € şeklinde Türk okuma formatında yazar.
+    return new Intl.NumberFormat('tr-TR', { style: 'currency', currency: 'EUR' }).format(amount || 0);
   };
 
   if (loading) {
@@ -110,7 +111,8 @@ const Dashboard = () => {
                   <div className="text-xs font-weight-bold text-success text-uppercase mb-1">Net Gelir</div>
                   <div className="h5 mb-0 font-weight-bold text-gray-800">{formatCurrency(stats?.collectedRevenue)}</div>
                 </div>
-                <div className="col-auto"><FaLiraSign size={30} className="text-gray-300 text-success opacity-50"/></div>
+                {/* Lira ikonu yerine Euro ikonu eklendi */}
+                <div className="col-auto"><FaEuroSign size={30} className="text-gray-300 text-success opacity-50"/></div>
               </div>
             </div>
           </div>
